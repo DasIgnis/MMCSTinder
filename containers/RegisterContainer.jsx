@@ -1,26 +1,67 @@
-import React from 'react'
-import { View, Text, Button } from 'react-native';
+import React, { useEffect } from 'react'
+import { View, TextInput, Button, StyleSheet, Alert } from 'react-native';
+import {useForm} from 'react-hook-form'
 
-export default class RegisterContainer extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+import stylesheet from '../styles/stylesheet'
 
-    register() {
-        this.props.navigation.reset({
+export default function RegisterContainer(props) {
+    const { register, handleSubmit, setValue } = useForm();
+
+    useEffect(() => {
+        register('login');
+        register('password');
+        register('passwordRep');
+    }, [register])
+
+    const onSubmit = data => {
+        if (!data.login || !data.password || data.password !== data.passwordRep) {
+            Alert.alert('Ошибка', 'Проверьте правильность заполнения формы');
+            return;
+        }
+        props.navigation.reset({
             index: 0,
             routes: [{name: 'profile'}]
         });
     }
 
-    render() {
-        return (
-            <View>
-                <Text>Registration</Text>
-                <Button
-                    title="Регистрация"
-                    onPress={() => {this.register()}}></Button>
-            </View>
-        )
-    }
+    return (
+        <View style={styles.container}>
+            <TextInput
+                placeholder="Логин"
+                textContentType="name"
+                style={StyleSheet.compose(stylesheet.inputMain, styles.loginInput)}
+                onChangeText={text => setValue('login', text)}></TextInput>
+            <TextInput
+                placeholder="Пароль"
+                textContentType="password"
+                style={StyleSheet.compose(stylesheet.inputMain, styles.loginInput)}
+                secureTextEntry={true}
+                onChangeText={text => setValue('password', text)}></TextInput>
+            <TextInput
+                placeholder="Повторить пароль"
+                textContentType="password"
+                style={StyleSheet.compose(stylesheet.inputMain, styles.loginInput)}
+                secureTextEntry={true}
+                onChangeText={text => setValue('passwordRep', text)}></TextInput>
+            <Button
+                title="Продолжить"
+                onPress={handleSubmit(onSubmit)}></Button>
+        </View>
+    )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 28,
+        marginLeft: 30,
+        marginRight: 30
+    },
+    loginInput: {
+        maxWidth: 300,
+        marginBottom: 20,
+        width: '100%'
+    }
+})

@@ -1,39 +1,48 @@
-import React from 'react'
-import { View, Text, StyleSheet, Button } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
+import React, { useEffect } from 'react'
+import { View, Text, StyleSheet, Button, TextInput, Alert } from 'react-native'
+import {useForm} from 'react-hook-form'
 
 import stylesheet from '../styles/stylesheet'
 
-export default class LoginContainer extends React.Component {
-    constructor(props){
-        super(props)
-    }
+export default function LoginContainer(props) {
+    const { register, handleSubmit, setValue } = useForm();
 
-    performLogin() {
-        this.props.navigation.reset({
+    useEffect(() => {
+        register('login');
+        register('password');
+    }, [register])
+
+    const onSubmit = data => {
+        if (!data.login || !data.password) {
+            Alert.alert('Ошибка', 'Проверьте правильность заполнения формы');
+            return;
+        }
+
+        props.navigation.reset({
             index: 0,
             routes: [{name: 'usercard'}]
         });
     }
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <TextInput
-                    placeholder="Логин"
-                    textContentType="name"
-                    style={StyleSheet.compose(stylesheet.inputMain, styles.loginInput)}></TextInput>
-                <TextInput
-                    placeholder="Пароль"
-                    textContentType="password"
-                    style={StyleSheet.compose(stylesheet.inputMain, styles.loginInput)}></TextInput>
-                <Button
-                    style={stylesheet.btnMain}
-                    title="Войти"
-                    onPress={() => { this.performLogin() }}></Button>
-            </View>
-        )
-    }
+    return (
+        <View style={styles.container}>
+            <TextInput
+                placeholder="Логин"
+                textContentType="name"
+                style={StyleSheet.compose(stylesheet.inputMain, styles.loginInput)}
+                onChangeText={text => setValue('login', text)}></TextInput>
+            <TextInput
+                placeholder="Пароль"
+                textContentType="password"
+                style={StyleSheet.compose(stylesheet.inputMain, styles.loginInput)}
+                secureTextEntry={true}
+                onChangeText={text => setValue('password', text)}></TextInput>
+            <Button
+                style={stylesheet.btnMain}
+                title="Войти"
+                onPress={handleSubmit(onSubmit)}></Button>
+        </View>
+    )
 }
 
 const styles = StyleSheet.create({
