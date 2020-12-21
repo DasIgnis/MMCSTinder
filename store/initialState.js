@@ -1,5 +1,13 @@
 const initialState = {
-    profile: {},
+    profile: {
+        name: '',
+        desctiption: '',
+        prefs: [],
+        flaws: [],
+        vkUid: '',
+        tgUid: '',
+        imgURI: ''
+    },
     users: [
         {
             id: 1, 
