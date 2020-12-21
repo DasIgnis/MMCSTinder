@@ -1,57 +1,38 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import SelectBox from 'react-native-multi-selectbox';
 import { xorBy } from 'lodash'
+import { useSelector, useDispatch } from 'react-redux';
+import { useForm } from 'react-hook-form';
 
 import colors from '../styles/colors'
 import stylesheet from '../styles/stylesheet'
+import { actionEditProfile } from '../store/actions/actionCreators'
 
 import LabeledInput from '../components/LabeledInput';
 
-const TECH_OPTIONS = [
-    {
-        id: 1,
-        item: 'Веб-разработка'
-    },
-    {
-        id: 2,
-        item: 'Машинное обучение'
-    },
-    {
-        id: 3,
-        item: 'Компьютерное зрение'
-    },
-    {
-        id: 4,
-        item: 'Геймдизайн'
-    },
-    {
-        id: 5,
-        item: 'Компиляторы'
-    },
-    {
-        id: 6,
-        item: 'Unity'
-    },
-    {
-        id: 7,
-        item: 'C#'
-    },
-    {
-        id: 8,
-        item: 'Английский язык'
-    },
-    {
-        id: 9,
-        item: 'Проектная деятельность'
-    }
-];
-
 export default function EditProfileContainer(props) {
+    const dispatch = useDispatch();
+
     const [selectedPrefs, setSelectedPrefs] = useState([]);
     const [selectedCons, setSelectedCons] = useState([]);
 
-    function saveProfile() {
+    const TECH_OPTIONS = useSelector(state => state.technologies);
+    const PROFILE = useSelector(state => state.profile);
+    console.log(PROFILE.name)
+    
+    const { register, handleSubmit, setValue } = useForm();
+    //setSelectedPrefs(PROFILE.prefs ? PROFILE.prefs : []);
+    //setSelectedCons(PROFILE.flaws ? PROFILE.flaws : []);
+
+    useEffect(() => {
+        register({name : PROFILE.name});
+        register('description');
+    }, [register])
+
+    const onSubmit = data => {
+        dispatch(actionEditProfile(data))
+
         props.navigation.reset({
             index: 0,
             routes: [{name: 'usercard'}]
@@ -61,16 +42,15 @@ export default function EditProfileContainer(props) {
     return (
         <View style={styles.container}>
             <LabeledInput
-                label="Фамилия"
-                placeholder="Фамилия"></LabeledInput>
-
-            <LabeledInput
                 label="Имя"
-                placeholder="Имя"></LabeledInput>
+                placeholder="Имя"
+                onChangeText={text => setValue('name', text)}></LabeledInput>
 
             <LabeledInput
                 label="Дополнительная информация"
-                placeholder=""></LabeledInput>
+                placeholder=""
+                onChangeText={text => setValue('description', text)}
+                multiline={true}></LabeledInput>
 
             <SelectBox
                 label="Мои сильные стороны"
@@ -85,7 +65,7 @@ export default function EditProfileContainer(props) {
 
             <Button 
                 title="Сохранить"
-                onPress={() => saveProfile()}></Button>
+                onPress={handleSubmit(onSubmit)}></Button>
         </View>
     )
 }
