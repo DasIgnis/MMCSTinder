@@ -12,15 +12,17 @@ const initialState = {
         {
             id: 1, 
             name: 'Задверняк Яна', 
-            desctiption: 'У тебя не будет проблем с React Native, если использовать не кроссплатформенные инструменты разработке',
+            description: 'У тебя не будет проблем с React Native, если использовать не кроссплатформенные инструменты разработки',
             prefs: [1, 4, 7, 8, 9],
             flaws: [2, 6],
-            photoUrl: 'https://thispersondoesnotexist.com/image'
+            photoUrl: 'https://thispersondoesnotexist.com/image',
+            vkUid: 'dasignis',
+            tgUid: 'dasignis'
         },
         {
             id: 2, 
             name: 'Вася Пупкин', 
-            desctiption: 'Я вообще просто заглушка',
+            description: 'Я вообще просто заглушка',
             prefs: [2, 3, 9],
             flaws: [1, 7],
             photoUrl: 'https://thispersondoesnotexist.com/image'
@@ -28,13 +30,13 @@ const initialState = {
         {
             id: 3, 
             name: 'Илон Маск', 
-            desctiption: 'Вживляю нейролинг в головы с undefined года',
+            description: 'Вживляю нейролинк в головы с undefined года',
             prefs: [1, 2, 3, 4, 5, 6, 7, 8],
-            flaws: [],
+            flaws: [10],
             photoUrl: 'https://thispersondoesnotexist.com/image'
         },
     ],
-    favs: [],
+    favs: [1, 3],
     technologies: [
         {
             id: 1,
@@ -71,6 +73,10 @@ const initialState = {
         {
             id: 9,
             item: 'Проектная деятельность'
+        },
+        {
+            id: 10,
+            item: 'Русский язык'
         }
     ]
 };

@@ -61,7 +61,9 @@ export default function EditProfileContainer(props) {
     };
 
     return (
-        <ScrollView style={styles.container}>
+        <View style={{flex: 1}}>
+        <ScrollView style={styles.container}
+            contentContainerStyle={{paddingBottom: 200}}>
             <TouchableOpacity onPress={openImagePickerAsync} style={styles.avatarContainer}>
                 {
                 profileImage === null
@@ -76,6 +78,18 @@ export default function EditProfileContainer(props) {
                 placeholder="Имя"
                 value={name}
                 onChange={value => setName(value)}></LabeledInput>
+
+            <LabeledInput
+                label="Имя пользователя VK"
+                placeholder="id0"
+                value={vkUid}
+                onChange={value => setVkUid(value)}></LabeledInput>
+
+            <LabeledInput
+                label="Имя пользователя Telegram"
+                placeholder="durov"
+                value={tgUid}
+                onChange={value => setTgUid(value)}></LabeledInput>
 
             <LabeledInput
                 label="Дополнительная информация"
@@ -114,13 +128,14 @@ export default function EditProfileContainer(props) {
                 title="Сохранить"
                 onPress={() => onSubmit()}></Button>
         </ScrollView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 28
+        padding: 28,
+        flex: 1
     },
     multiselect: {
         marginBottom: 16

@@ -7,11 +7,11 @@ export default function UserCardContainer(props) {
     React.useLayoutEffect(() => {
         props.navigation.setOptions({
             headerRight: () => (
-                <Button title="Профиль" onPress={() => props.navigation.navigate('profile')}></Button>
-            ),
-            headerLeft: () => {
-                <Button title="Сохраненное" onPress={() => {/*todo: navigate to saved list*/}}></Button>
-            }
+                <View style={{flexDirection: 'row'}}>
+                    <Button title="Профиль 👨" onPress={() => props.navigation.navigate('profile')}></Button>
+                    <Button title="Избранное ❤️" onPress={() => props.navigation.navigate('favourites')}></Button>
+                </View>
+            )
         })
     })
     
