@@ -25,18 +25,20 @@ const initialState = {
             description: 'Я вообще просто заглушка',
             prefs: [2, 3, 9],
             flaws: [1, 7],
-            photoUrl: 'https://thispersondoesnotexist.com/image'
+            photoUrl: 'https://thispersondoesnotexist.com/image',
+            vkUid: 'durov',
+            tgUid: 'durov'
         },
         {
             id: 3, 
             name: 'Илон Маск', 
             description: 'Вживляю нейролинк в головы с undefined года',
             prefs: [1, 2, 3, 4, 5, 6, 7, 8],
-            flaws: [10],
+            flaws: [],
             photoUrl: 'https://thispersondoesnotexist.com/image'
         },
     ],
-    favs: [1, 3],
+    favs: [],
     technologies: [
         {
             id: 1,
