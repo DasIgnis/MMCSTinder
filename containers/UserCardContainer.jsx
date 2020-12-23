@@ -2,30 +2,25 @@ import React, { useState, useEffect } from 'react'
 import { View, Text, Button, StyleSheet } from 'react-native'
 
 import UserCard from '../components/UserCard'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch, connect } from 'react-redux'
 import { actionAddToFavourite } from '../store/actions/actionCreators'
 import { createSelector } from 'reselect'
 
-const usersSelector = createSelector(
-    state => { 
-        let users = state.users.filter(x => !state.favs.includes(x.id));
+import firebase from '../firebase'
 
-        users.sort(a => {
-            a.flaws.filter(x => state.profile.prefs.includes(x)).length 
-                                + a.prefs.filter(x => state.profile.flaws.includes(x))
-        })
-
-        return [...users];
-    },
-    users => [...users]
-)
+const mapStateToProps = (state) => {
+    return {
+      users: state.users,
+      technologies: state.technologies
+    }
+  }
 
 const technologiesSelector = createSelector(
     state => state.technologies,
     technologies => technologies
 )
 
-export default function UserCardContainer(props) {
+function UserCardContainer(props) {
     React.useLayoutEffect(() => {
         props.navigation.setOptions({
             headerRight: () => (
@@ -40,39 +35,39 @@ export default function UserCardContainer(props) {
     const dispatch = useDispatch();
 
     const [currentCard, setCurrentCard] = useState(null);
-    
-    const users = useSelector(usersSelector);
-    const technologies = useSelector(technologiesSelector);
+    const profile = useSelector(state => state.profile)
 
-    console.log(users.map(x=>x.id))
+    console.log(props.users.map(x=>x.id))
 
     useEffect(() => {
-        setCurrentCard(users.length > 0 ? users[0] : null);
-        users.splice(0, 1);
+        //const db = firebase.firestore().collection('profiles');
+        props.users.sort(a => a.flaws.filter(x => profile.prefs.includes(x)).length 
+                        + a.prefs.filter(x => profile.flaws.includes(x)))
+        setCurrentCard(props.users.length > 0 ? props.users[0] : null);
+        props.users.splice(0, 1);
     }, []);
 
     function techById(id) {
-        const index = technologies.findIndex(x => x.id === id);
+        const index = props.technologies.findIndex(x => x.id === id);
         if (index !== -1) {
-            return technologies[index].item
+            return props.technologies[index].item
         } else {
             return ''
         }
     }
 
     function nextCard() {
-        if (users.length > 0) {
+        if (props.users.length > 0) {
             console.log('next card');
-            setCurrentCard(users[0]);
-            users.splice(0, 1);
+            setCurrentCard(props.users[0]);
+            props.users.splice(0, 1);
         } else {
             setCurrentCard(null);
         }
     }
 
-    function fav(id) {
-        console.log(`faved ${id}`)
-        dispatch(actionAddToFavourite(id));
+    function fav(card) {
+        dispatch(actionAddToFavourite(card));
         nextCard();
     }
     
@@ -89,7 +84,7 @@ export default function UserCardContainer(props) {
                     vkUid={currentCard.vkUid}
                     tgUid={currentCard.tgUid}
                     onDiscard={() => nextCard()}
-                    onFav={() => fav(currentCard.id)}></UserCard>
+                    onFav={() => fav(currentCard)}></UserCard>
                 : <Text style={styles.finished}>
                     Поздравляем! Вы так отчаялись, что просмотрели профили всех пользователей
                 </Text>
@@ -105,3 +100,5 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     }
 })
+
+export default connect(mapStateToProps)(UserCardContainer)

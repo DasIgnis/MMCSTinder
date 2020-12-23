@@ -5,8 +5,7 @@ import FavsListItem from '../components/FavsListItem';
 import UserModal from '../components/UserModal';
 
 export default function FavsListContainer(props) {
-    const favs = useSelector(state => state.favs);
-    const users = useSelector(state => state.users.filter(x => favs.includes(x.id)));
+    const users = useSelector(state => state.favs);
     const technologies = useSelector(state => state.technologies);
 
     const [selectedUser, setSelectedUser] = useState({prefs: [], flaws: []});

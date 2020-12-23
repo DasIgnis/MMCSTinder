@@ -7,18 +7,6 @@ import colors from '../styles/colors'
 import UserCardProfileLink from './UserCardProfileLink'
 
 export default function UserCard({profileUrl, name, description, prefs, flaws, vkUid, tgUid, onFav, onDiscard}) {
-    
-    const fadeAnim = useRef(new Animated.Value(0)).current  // Initial value for opacity: 0
-
-    React.useEffect(() => {
-        Animated.timing(
-        fadeAnim,
-        {
-            toValue: 1,
-            duration: 1000,
-        }
-        ).start();
-    }, [fadeAnim])
 
     const handleOpen = async (link) => {
         const supported = await Linking.canOpenURL(link);
@@ -31,10 +19,6 @@ export default function UserCard({profileUrl, name, description, prefs, flaws, v
     }
     
     return (
-        <Animated.View
-            style={{
-                opacity: fadeAnim,         // Bind opacity to animated value
-            }}>
         <View style={styles.card}>
             <ScrollView style={styles.profileInfo}>
                 <Image source={{uri: profileUrl}} style={styles.profImg}></Image>
@@ -104,7 +88,6 @@ export default function UserCard({profileUrl, name, description, prefs, flaws, v
                 </View>
             </View>
         </View>
-        </Animated.View>
     )
 }
 
